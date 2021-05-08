@@ -10,6 +10,11 @@
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
+#cosas extra del coso
+.idea
+LICENSE
+README.md
+
 # Package Files #
 *.jar
 *.war
