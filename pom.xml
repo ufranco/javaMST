@@ -1,0 +1,84 @@
+<project
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.progra3</groupId>
+  <artifactId>javaMST</artifactId>
+  <version>1.0.0</version>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <java.version>11</java.version>
+  </properties>
+
+  <developers>
+    <developer>
+      <id>Ulises Javier Franco</id>
+      <roles>
+        <role>Back developer</role>
+      </roles>
+      <url>github.com/ufranco</url>
+    </developer>
+
+    <developer>
+      <id>Gastón Ezequiel Mansilla</id>
+      <roles>
+        <role>Back developer</role>
+      </roles>
+      <url>github.com/SrParzival</url>
+    </developer>
+
+    <developer>
+      <id>Victor Santiago Florentin</id>
+      <roles>
+        <role>Front developer</role>
+      </roles>
+      <url>github.com/victorFlorentin</url>
+    </developer>
+
+    <developer>
+      <id>Martín Leguizamon</id>
+      <roles>
+        <role>Front developer</role>
+      </roles>
+      <url>github.com/legui04</url>
+    </developer>
+  </developers>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-junit-jupiter</artifactId>
+      <version>3.8.0</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.1</version>
+        <configuration>
+          <release>${java.version}</release>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.2.0</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <addClasspath>true</addClasspath>
+              <mainClass>
+                com.progra3.javaMST.Main
+              </mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
