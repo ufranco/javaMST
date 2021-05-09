@@ -1,4 +1,4 @@
-package com.progra3.javaMST.back.controllers;
+package com.progra3.javaMST.back.interfaces;
 
 import com.progra3.javaMST.back.domain.services.GraphService;
 
