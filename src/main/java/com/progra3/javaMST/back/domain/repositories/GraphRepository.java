@@ -1,6 +1,7 @@
 package com.progra3.javaMST.back.domain.repositories;
 
 import com.progra3.javaMST.back.application.algorithms.Edge;
+import com.progra3.javaMST.back.application.exceptions.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -13,60 +14,58 @@ public class GraphRepository {
     graph = new int[size][size];
   }
 
-  public void removeEdge(final Integer x, final Integer y) {
+  public void removeEdge(final Integer x, final Integer y) throws InvalidVertexException, VertexIndexOutOfBoundsException {
     checkEdge(x,y);
 
     graph[x][y] = Integer.MAX_VALUE;
     graph[y][x] = Integer.MAX_VALUE;
   }
 
-  public void addEdge(final Integer x, final Integer y, final Integer weight) {
+  public void addEdge(
+    final Integer x,
+    final Integer y,
+    final Integer weight
+  ) throws
+    InvalidVertexException,
+    VertexIndexOutOfBoundsException,
+    InvalidEdgeWeightException,
+    EdgeAlreadyExistException
+  {
     checkEdge(x,y);
+
+    if(weight < 0 ) throw new InvalidEdgeWeightException("An edge cannot have negative weight");
+
+    if(existsEdge(x,y)) throw new EdgeAlreadyExistException("That edge already exists!");
 
     graph[x][y] = weight;
     graph[y][x] = weight;
   }
 
   public Boolean existsEdge(final Integer x, final Integer y) {
-    return graph[x][y] == graph[y][x];
+    return graph[y][x] != Integer.MAX_VALUE && graph[x][y] == graph[y][x];
   }
 
-  public Integer getEdgeWeight(final Integer x, final Integer y) {
+  public Integer getEdgeWeight(final Integer x, final Integer y) throws InvalidVertexException, VertexIndexOutOfBoundsException {
     checkEdge(x,y);
     return graph[x][y];
-  }
-
-  public boolean isVertex(final Integer x){
-    return x < size() && x > 0;
-  }
-
-  public Set<Integer> getVertexNeighbors(final Integer x) {
-    checkVertex(x);
-    final Set<Integer> neighbors = new HashSet<>();
-
-    for(int y = 0; y < size(); y++)
-      if (x != y && existsEdge( x, y) ) {
-        neighbors.add(y);
-      }
-    return neighbors;
   }
 
   public Integer size() {
     return graph.length;
   }
 
-  public void checkEdge(final Integer x, final Integer y){
+  public void checkEdge(final Integer x, final Integer y) throws InvalidVertexException, VertexIndexOutOfBoundsException {
     checkVertex(x);
     checkVertex(y);
 
     if (x.equals(y)) {
-      throw new IllegalArgumentException("not supported loops (" + x + ", " + y + ")");
+      throw new CircularReferenceException("not supported loops (" + x + ", " + y + ")");
     }
   }
 
-  private void checkVertex(final Integer vertex) {
-    if ( vertex < 0 ) throw new IllegalArgumentException("not supported negative vertex: "+ vertex);
-    if( vertex >= size()) throw new IllegalArgumentException("vertex out of graph range: " + vertex);
+  private void checkVertex(final Integer vertex) throws InvalidVertexException, VertexIndexOutOfBoundsException   {
+    if ( vertex < 0 ) throw new InvalidVertexException("not supported negative vertex: "+ vertex);
+    if( vertex >= size()) throw new VertexIndexOutOfBoundsException("vertex out of graph range: " + vertex);
   }
 
   public int[][] getGraph() {
@@ -74,7 +73,8 @@ public class GraphRepository {
   }
 
 
-  public void divideInRegions(Integer amountOfRegions) {
+  public void divideInRegions(Integer amountOfRegions) throws InvalidAmountOfRegionsException {
+    if(amountOfRegions < 1) throw new InvalidAmountOfRegionsException("Negative number of regions not allowed.");
     final var edgesToDelete = findHeavierEdges(amountOfRegions);
 
     System.out.println(edgesToDelete);
