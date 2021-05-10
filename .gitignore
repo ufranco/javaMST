@@ -12,8 +12,7 @@
 
 #cosas extra del coso
 .idea
-LICENSE
-README.md
+*.iml
 
 # Package Files #
 *.jar

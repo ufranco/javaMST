@@ -1,7 +1,9 @@
 package com.progra3.javaMST.back.domain.repositories;
 
-import java.util.HashSet;
-import java.util.Set;
+import com.progra3.javaMST.back.application.algorithms.Edge;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class GraphRepository {
 
@@ -69,5 +71,40 @@ public class GraphRepository {
 
   public int[][] getGraph() {
     return graph.clone();
+  }
+
+
+  public void divideInRegions(Integer amountOfRegions) {
+    final var edgesToDelete = findHeavierEdges(amountOfRegions);
+
+    System.out.println(edgesToDelete);
+
+    edgesToDelete.forEach(
+      edge -> graph[edge.getX()][edge.getY()] = Integer.MAX_VALUE
+    );
+
+  }
+
+  private List<Edge> findHeavierEdges(Integer amountOfRegions) {
+
+    final var edges = new ArrayList<Edge>();
+
+    for(int x = 0; x < size(); x++) {
+
+      for(int y = 0; y < size(); y++) {
+
+        var edgeWeight = graph[x][y];
+        if(edgeWeight < Integer.MAX_VALUE) {
+          edges.add(new Edge(x, y, edgeWeight));
+          edges.add(new Edge(y, x, edgeWeight));
+        }
+      }
+    }
+
+    return edges.stream()
+      .sorted(Comparator.comparing(Edge::getWeight))
+      .limit((amountOfRegions - 1) * 2L)
+      .collect(Collectors.toList());
+
   }
 }

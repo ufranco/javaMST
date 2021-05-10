@@ -33,9 +33,7 @@ public class GraphService {
 
   public int [][] divideInRegions(final Integer amountOfRegions) {
     repository = KruskalProcedure.mst(repository.getGraph());
-
-    // TODO: delete (amountOfRegions -1) edges, forming amountOfRegions regions on the graph
-
+    repository.divideInRegions(amountOfRegions);
     return repository.getGraph();
   }
 }
