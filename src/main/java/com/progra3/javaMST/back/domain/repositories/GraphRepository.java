@@ -1,10 +1,9 @@
 package com.progra3.javaMST.back.domain.repositories;
 
-import com.progra3.javaMST.back.application.utils.Edge;
 import com.progra3.javaMST.back.application.exceptions.*;
+import com.progra3.javaMST.back.application.utils.Edge;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -29,8 +28,8 @@ public class GraphRepository {
   public void removeEdge(final Integer x, final Integer y) throws InvalidVertexException, VertexIndexOutOfBoundsException {
     checkEdge(x,y);
 
-    graph[x][y] = Integer.MAX_VALUE;
-    graph[y][x] = Integer.MAX_VALUE;
+    graph[x][y] = NULL;
+    graph[y][x] = NULL;
   }
 
   public void addEdge(
@@ -54,7 +53,7 @@ public class GraphRepository {
   }
 
   public Boolean existsEdge(final Integer x, final Integer y) {
-    return graph[y][x] != Integer.MAX_VALUE && graph[x][y] == graph[y][x];
+    return graph[y][x] != NULL && graph[x][y] == graph[y][x];
   }
 
   public Integer getEdgeWeight(final Integer x, final Integer y) throws InvalidVertexException, VertexIndexOutOfBoundsException {
@@ -92,9 +91,7 @@ public class GraphRepository {
 
     final var edgesToDelete = findHeavierEdges(amountOfRegions);
 
-    edgesToDelete.forEach(
-      edge -> graph[edge.getX()][edge.getY()] = Integer.MAX_VALUE
-    );
+    edgesToDelete.forEach(edge -> graph[edge.getX()][edge.getY()] = NULL);
 
   }
 
@@ -106,7 +103,7 @@ public class GraphRepository {
       for(int y = 0; y < size(); y++) {
 
         var edgeWeight = graph[x][y];
-        if(edgeWeight < Integer.MAX_VALUE) {
+        if(edgeWeight < NULL) {
           edges.add(new Edge(x, y, edgeWeight));
           edges.add(new Edge(y, x, edgeWeight));
         }

@@ -6,6 +6,8 @@ import com.progra3.javaMST.back.domain.repositories.GraphRepository;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
+import static com.progra3.javaMST.back.application.utils.GraphUtils.NULL;
+
 public class KruskalProcedure {
 
   public static GraphRepository mst(final int[][] graph) {
@@ -22,7 +24,7 @@ public class KruskalProcedure {
 
     while (edgeCount < vertexCount - 1) {
 
-      var shortestWeight = Integer.MAX_VALUE;
+      var shortestWeight = NULL;
       var shortestFrom = -1;
       var shortestTo = -1;
 
