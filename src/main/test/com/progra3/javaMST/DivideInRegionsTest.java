@@ -14,11 +14,11 @@ public class DivideInRegionsTest {
 
   public DivideInRegionsTest() {
     service = new GraphService();
-    service.initializeGraph(5);
   }
 
   @Test
   public void validDivision() {
+
 
     final var expectedResult = new int[][] {
       { NULL, 2  , NULL, NULL  , NULL },
@@ -27,6 +27,21 @@ public class DivideInRegionsTest {
       { NULL  , NULL  , NULL, NULL, NULL },
       { NULL, 5  , NULL  , NULL  , NULL },
     };
+
+    initializeGraph();
+
+    assertThat(service.divideInRegions(2))
+      .describedAs("Initial graph devided in two separated regions")
+      .isNotNull()
+      .isInstanceOf(int[][].class)
+      .isEqualTo(expectedResult);
+
+
+
+  }
+
+  private void initializeGraph() {
+    service.initializeGraph(5);
 
     service.addEdge(1, 0,2);
     service.addEdge(1, 2,3);
@@ -45,15 +60,6 @@ public class DivideInRegionsTest {
       { NULL, 5  , 7  , 9  , NULL },
     }
     */
-
-    assertThat(service.divideInRegions(2))
-      .describedAs("Initial graph devided in two separated regions")
-      .isNotNull()
-      .isInstanceOf(int[][].class)
-      .isEqualTo(expectedResult);
-
-
-
   }
 
   @Test
@@ -73,6 +79,23 @@ public class DivideInRegionsTest {
       .describedAs("It should fail due to negative amount of regions")
       .isInstanceOf(InvalidAmountOfRegionsException.class)
       .hasMessage("Negative or null number of regions not allowed.");
+
+  }
+
+
+  @Test
+  public void moreRegionsThanPosible() {
+    initializeGraph();
+
+    assertThatThrownBy(() -> service.divideInRegions(155) )
+      .describedAs(
+        "It should fail due to the amount of regions requested" +
+          " is greater than the amount of vertex in the graph."
+      ).isInstanceOf(InvalidAmountOfRegionsException.class)
+      .hasMessage("There's not enough vertex in graph to satisfy this request");
+
+
+
 
   }
 }

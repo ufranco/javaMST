@@ -42,7 +42,7 @@ public class GraphService {
 
   }
 
-  public int [][] divideInRegions(final Integer amountOfRegions) throws InvalidAmountOfRegionsException {
+  public int [][] divideInRegions(final Integer amountOfRegions) throws InvalidAmountOfRegionsException{
 
     repository = KruskalProcedure.mst(repository.getGraph());
     repository.divideInRegions(amountOfRegions);

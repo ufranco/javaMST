@@ -95,8 +95,12 @@ public class GraphRepository {
 
   }
 
-  private List<Edge> findHeavierEdges(Integer amountOfRegions) {
+  private List<Edge> findHeavierEdges(Integer amountOfRegions) throws InvalidAmountOfRegionsException {
     final var edges = new ArrayList<Edge>();
+
+    if (amountOfRegions > size()) throw new InvalidAmountOfRegionsException(
+      "There's not enough vertex in graph to satisfy this request"
+    );
 
     for(int x = 0; x < size(); x++) {
 

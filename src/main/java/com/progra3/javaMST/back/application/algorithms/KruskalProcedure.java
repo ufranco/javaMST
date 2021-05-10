@@ -51,8 +51,6 @@ public class KruskalProcedure {
 
   // Find set of vertex x
   private static Integer find(Integer vertex, final int[] vertexParent) {
-    System.out.println(Arrays.toString(vertexParent));
-    System.out.println(vertex);
     while (vertexParent[vertex] != vertex) {
       vertex = vertexParent[vertex];
     }
