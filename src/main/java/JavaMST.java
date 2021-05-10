@@ -1,5 +1,3 @@
-import com.progra3.javaMST.back.application.algorithms.KruskalProcedure;
-
 public class JavaMST {
 
   /* Let us create the following graph

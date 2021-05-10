@@ -1,10 +1,15 @@
 package com.progra3.javaMST.back.domain.repositories;
 
-import com.progra3.javaMST.back.application.algorithms.Edge;
+import com.progra3.javaMST.back.application.utils.Edge;
 import com.progra3.javaMST.back.application.exceptions.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static com.progra3.javaMST.back.application.utils.GraphUtils.NULL;
 
 public class GraphRepository {
 
@@ -12,6 +17,13 @@ public class GraphRepository {
 
   public GraphRepository(final Integer size) {
     graph = new int[size][size];
+    Stream.iterate(0, x -> x = x + 1)
+      .limit(size)
+      .forEach( x ->
+        Stream.iterate(0, y -> y = y + 1)
+          .limit(size)
+          .forEach(y -> graph[x][y] = NULL)
+    );
   }
 
   public void removeEdge(final Integer x, final Integer y) throws InvalidVertexException, VertexIndexOutOfBoundsException {
@@ -33,7 +45,7 @@ public class GraphRepository {
   {
     checkEdge(x,y);
 
-    if(weight < 0 ) throw new InvalidEdgeWeightException("An edge cannot have negative weight");
+    if(weight == null || weight < 0 ) throw new InvalidEdgeWeightException("An edge cannot have negative nor null weight");
 
     if(existsEdge(x,y)) throw new EdgeAlreadyExistException("That edge already exists!");
 
@@ -64,7 +76,7 @@ public class GraphRepository {
   }
 
   private void checkVertex(final Integer vertex) throws InvalidVertexException, VertexIndexOutOfBoundsException   {
-    if ( vertex < 0 ) throw new InvalidVertexException("not supported negative vertex: "+ vertex);
+    if ( vertex == null || vertex < 0 ) throw new InvalidVertexException("not supported negative nor null vertex: "+ vertex);
     if( vertex >= size()) throw new VertexIndexOutOfBoundsException("vertex out of graph range: " + vertex);
   }
 
@@ -74,10 +86,11 @@ public class GraphRepository {
 
 
   public void divideInRegions(Integer amountOfRegions) throws InvalidAmountOfRegionsException {
-    if(amountOfRegions < 1) throw new InvalidAmountOfRegionsException("Negative number of regions not allowed.");
-    final var edgesToDelete = findHeavierEdges(amountOfRegions);
+    if(
+      amountOfRegions == null || amountOfRegions < 1
+    ) throw new InvalidAmountOfRegionsException("Negative or null number of regions not allowed.");
 
-    System.out.println(edgesToDelete);
+    final var edgesToDelete = findHeavierEdges(amountOfRegions);
 
     edgesToDelete.forEach(
       edge -> graph[edge.getX()][edge.getY()] = Integer.MAX_VALUE
@@ -86,7 +99,6 @@ public class GraphRepository {
   }
 
   private List<Edge> findHeavierEdges(Integer amountOfRegions) {
-
     final var edges = new ArrayList<Edge>();
 
     for(int x = 0; x < size(); x++) {
@@ -102,7 +114,7 @@ public class GraphRepository {
     }
 
     return edges.stream()
-      .sorted(Comparator.comparing(Edge::getWeight))
+      .sorted((e1, e2) -> Integer.compare(e2.getWeight(), e1.getWeight()))
       .limit((amountOfRegions - 1) * 2L)
       .collect(Collectors.toList());
 

@@ -9,7 +9,7 @@ public class GraphService {
 
   public int[][] initializeGraph(final Integer graphSize) throws InvalidGraphSizeException {
 
-    if(graphSize < 1) throw new InvalidGraphSizeException("Graph cannot have null nor negative size");
+    if(graphSize == null || graphSize < 1) throw new InvalidGraphSizeException("Graph cannot have null nor negative size");
     repository = new GraphRepository(graphSize);
     return repository.getGraph();
   }

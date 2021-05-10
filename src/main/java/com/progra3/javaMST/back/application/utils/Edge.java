@@ -1,4 +1,4 @@
-package com.progra3.javaMST.back.application.algorithms;
+package com.progra3.javaMST.back.application.utils;
 
 public class Edge {
 

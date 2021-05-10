@@ -3,6 +3,9 @@ package com.progra3.javaMST.back.application.algorithms;
 
 import com.progra3.javaMST.back.domain.repositories.GraphRepository;
 
+import java.util.Arrays;
+import java.util.stream.Stream;
+
 public class KruskalProcedure {
 
   public static GraphRepository mst(final int[][] graph) {
@@ -11,7 +14,9 @@ public class KruskalProcedure {
     final var mstGraph = new GraphRepository(vertexCount);
     final var vertexParent = new int[vertexCount];
 
-    for (int x = 0; x < vertexCount; x++) vertexParent[x] = x;
+    Stream.iterate( 0 , x -> x = x + 1)
+      .limit(vertexCount)
+      .forEach( x -> vertexParent[x] = x);
 
     var edgeCount = 0;
 
@@ -25,11 +30,7 @@ public class KruskalProcedure {
       for (int x = 0; x < vertexCount; x++) {
 
         for (int y = 0; y < vertexCount; y++) {
-          //si find()
-          if (
-            !find(x, vertexParent).equals(find(y, vertexParent))
-              && graph[x][y] < shortestWeight
-          ) {
+          if (!find(x, vertexParent).equals(find(y, vertexParent)) && graph[x][y] < shortestWeight) {
             shortestWeight = graph[x][y];
             shortestFrom = x;
             shortestTo = y;
@@ -37,17 +38,8 @@ public class KruskalProcedure {
         }
       }
 
-      union(
-        shortestFrom,
-        shortestTo,
-        vertexParent
-      );
-
-      mstGraph.addEdge(
-        shortestFrom,
-        shortestTo,
-        shortestWeight
-      );
+      union(shortestFrom, shortestTo, vertexParent);
+      mstGraph.addEdge(shortestFrom, shortestTo, shortestWeight);
 
       edgeCount++;
     }
@@ -57,7 +49,11 @@ public class KruskalProcedure {
 
   // Find set of vertex x
   private static Integer find(Integer vertex, final int[] vertexParent) {
-    while (vertexParent[vertex] != vertex) vertex = vertexParent[vertex];
+    System.out.println(Arrays.toString(vertexParent));
+    System.out.println(vertex);
+    while (vertexParent[vertex] != vertex) {
+      vertex = vertexParent[vertex];
+    }
     return vertex;
   }
 
@@ -66,11 +62,8 @@ public class KruskalProcedure {
    false if x and y are already in same
    set.
  */
-  private static void union(
-    final Integer x,
-    final Integer y,
-    final int[] vertexParent
-  ) {
+
+  private static void union(final Integer x, final Integer y, final int[] vertexParent) {
     final var shortestFrom = find(x, vertexParent);
     final var shortestTo = find(y, vertexParent);
     vertexParent[shortestFrom] = shortestTo;
