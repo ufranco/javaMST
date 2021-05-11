@@ -131,7 +131,6 @@ public class AddEdges {
     if (vX != vY)
       return new Edge(vX, vY, vWeight);
     else {
-      JOptionPane.showMessageDialog(this.panel, "no se admiten loops"); //mensajito de error
       return null;
     }
   }
@@ -144,7 +143,7 @@ public class AddEdges {
       record = record + text;
       edgesRecord.setText("[" + record + "]");
     } else
-      JOptionPane.showMessageDialog(this.panel, "ya existe la arista dada");
+      JOptionPane.showMessageDialog(this.panel, "ya existe la arista dada, o es un loop");
   }
 
   private void deleteOne() {

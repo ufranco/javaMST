@@ -60,6 +60,7 @@ public class EndResult {
       @Override
       public void mouseClicked(MouseEvent e) {
         startProcess();
+        btnStartProcess.removeMouseListener(this);
       }
     });
     panel.add(btnStartProcess);
@@ -76,6 +77,7 @@ public class EndResult {
   }
 
   private void startProcess() {
+
     btnStartProcess.setEnabled(false);
     endResult = g.divideInRegions((Integer) regionCounter.getValue());
     edges = new ArrayList<Edge>();

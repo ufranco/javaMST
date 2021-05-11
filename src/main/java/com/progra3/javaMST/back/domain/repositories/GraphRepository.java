@@ -52,37 +52,15 @@ public class GraphRepository {
     graph[y][x] = weight;
   }
 
-  public Boolean existsEdge(final Integer x, final Integer y) {
+  private Boolean existsEdge(final Integer x, final Integer y) {
     return graph[y][x] != NULL && graph[x][y] == graph[y][x];
   }
-
-/*  public Boolean isConnected() {
-    var  vertexesReached = new HashSet<Integer>();
-
-    var x1 = 0;
-    var y1 = 0;
-
-    while (y1 < size()) {
-      if(graph[x1][y1] != NULL) {
-        vertexesReached.add(y1);
-      }
-        y1++;
-    }
-
-    vertexesReached.forEach(x2 -> {
-      Stream.iterate(0, y2 -> y2 = y2 + 1).limit(size()).forEach( y2 -> {
-        if(graph[x2][y2] != NULL) vertexesReached.add(y2);
-      });
-    });
-
-    return vertexesReached.size() == size();
-  }*/
 
   public Integer size() {
     return graph.length;
   }
 
-  public void checkEdge(final Integer x, final Integer y) throws InvalidVertexException, VertexIndexOutOfBoundsException {
+  private void checkEdge(final Integer x, final Integer y) throws InvalidVertexException, VertexIndexOutOfBoundsException {
     checkVertex(x);
     checkVertex(y);
 
@@ -91,7 +69,7 @@ public class GraphRepository {
     }
   }
 
-  private void checkVertex(final Integer vertex) throws InvalidVertexException, VertexIndexOutOfBoundsException   {
+  public void checkVertex(final Integer vertex) throws InvalidVertexException, VertexIndexOutOfBoundsException   {
     if ( vertex == null || vertex < 0 ) throw new InvalidVertexException("not supported negative nor null vertex: "+ vertex);
     if( vertex >= size()) throw new VertexIndexOutOfBoundsException("vertex out of graph range: " + vertex);
   }
@@ -131,6 +109,5 @@ public class GraphRepository {
       .sorted((e1, e2) -> Integer.compare(e2.getWeight(), e1.getWeight()))
       .limit((amountOfRegions - 1) * 2L)
       .collect(Collectors.toList());
-
   }
 }
