@@ -1,11 +1,10 @@
 package com.progra3.javaMST.algorithm;
 
 import com.progra3.javaMST.back.application.algorithms.KruskalProcedure;
-import com.progra3.javaMST.back.domain.services.GraphService;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static com.progra3.javaMST.back.application.utils.GraphUtils.NULL;
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 public class KruskalProcedureTest {

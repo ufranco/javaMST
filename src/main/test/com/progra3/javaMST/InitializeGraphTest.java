@@ -3,10 +3,10 @@ package com.progra3.javaMST;
 import com.progra3.javaMST.back.application.exceptions.InvalidGraphSizeException;
 import com.progra3.javaMST.back.domain.services.GraphService;
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static com.progra3.javaMST.back.application.utils.GraphUtils.NULL;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class InitializeGraphTest {
 

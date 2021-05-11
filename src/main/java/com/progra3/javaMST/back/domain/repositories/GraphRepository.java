@@ -56,10 +56,27 @@ public class GraphRepository {
     return graph[y][x] != NULL && graph[x][y] == graph[y][x];
   }
 
-  public Integer getEdgeWeight(final Integer x, final Integer y) throws InvalidVertexException, VertexIndexOutOfBoundsException {
-    checkEdge(x,y);
-    return graph[x][y];
-  }
+/*  public Boolean isConnected() {
+    var  vertexesReached = new HashSet<Integer>();
+
+    var x1 = 0;
+    var y1 = 0;
+
+    while (y1 < size()) {
+      if(graph[x1][y1] != NULL) {
+        vertexesReached.add(y1);
+      }
+        y1++;
+    }
+
+    vertexesReached.forEach(x2 -> {
+      Stream.iterate(0, y2 -> y2 = y2 + 1).limit(size()).forEach( y2 -> {
+        if(graph[x2][y2] != NULL) vertexesReached.add(y2);
+      });
+    });
+
+    return vertexesReached.size() == size();
+  }*/
 
   public Integer size() {
     return graph.length;
@@ -85,9 +102,6 @@ public class GraphRepository {
 
 
   public void divideInRegions(Integer amountOfRegions) throws InvalidAmountOfRegionsException {
-    if(
-      amountOfRegions == null || amountOfRegions < 1
-    ) throw new InvalidAmountOfRegionsException("Negative or null number of regions not allowed.");
 
     final var edgesToDelete = findHeavierEdges(amountOfRegions);
 

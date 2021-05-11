@@ -2,11 +2,11 @@ package com.progra3.javaMST;
 
 import com.progra3.javaMST.back.application.exceptions.*;
 import com.progra3.javaMST.back.domain.services.GraphService;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
+import static com.progra3.javaMST.back.application.utils.GraphUtils.NULL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static com.progra3.javaMST.back.application.utils.GraphUtils.NULL;
 
 public class AddEdgeTest {
 

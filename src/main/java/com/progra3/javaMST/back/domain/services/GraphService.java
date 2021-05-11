@@ -9,7 +9,10 @@ public class GraphService {
 
   public int[][] initializeGraph(final Integer graphSize) throws InvalidGraphSizeException {
 
-    if(graphSize == null || graphSize < 1) throw new InvalidGraphSizeException("Graph cannot have null nor negative size");
+    if(graphSize == null || graphSize < 1) {
+      throw new InvalidGraphSizeException("Graph cannot have null nor negative size");
+    }
+
     repository = new GraphRepository(graphSize);
     return repository.getGraph();
   }
@@ -43,6 +46,10 @@ public class GraphService {
   }
 
   public int [][] divideInRegions(final Integer amountOfRegions) throws InvalidAmountOfRegionsException{
+
+    if(amountOfRegions == null || amountOfRegions < 1) {
+      throw new InvalidAmountOfRegionsException("Negative or null number of regions not allowed.");
+    }
 
     repository = KruskalProcedure.mst(repository.getGraph());
     repository.divideInRegions(amountOfRegions);
