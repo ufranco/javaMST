@@ -4,14 +4,14 @@ import com.progra3.javaMST.back.application.exceptions.*;
 import com.progra3.javaMST.back.domain.services.GraphService;
 
 public class GraphController {
-  private final GraphService repository;
+  private final GraphService service;
 
-  public GraphController() { this.repository = new GraphService(); }
+  public GraphController() { service = new GraphService(); }
 
   public int[][] initializeGraph(final Integer graphSize)
     throws InvalidGraphSizeException
   {
-    return repository.initializeGraph(graphSize);
+    return service.initializeGraph(graphSize);
   }
 
   public int[][] addEdge(
@@ -24,7 +24,7 @@ public class GraphController {
     InvalidEdgeWeightException,
     EdgeAlreadyExistException
   {
-    return repository.addEdge(x, y, edgeWeight);
+    return service.addEdge(x, y, edgeWeight);
   }
 
   public int[][] removeEdge(
@@ -34,13 +34,13 @@ public class GraphController {
     InvalidVertexException,
     VertexIndexOutOfBoundsException
   {
-    return repository.removeEdge(x, y);
+    return service.removeEdge(x, y);
   }
 
   public int[][] divideInRegions(final Integer amountOfRegions)
     throws InvalidAmountOfRegionsException
   {
-    return repository.divideInRegions(amountOfRegions);
+    return service.divideInRegions(amountOfRegions);
   }
 
 }
