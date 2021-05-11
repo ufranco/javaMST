@@ -91,7 +91,7 @@ public class EndResult {
     for (int i=0; i< edges.size(); i++){
       response = response + edges.get(i).toString() +"<br>";
     }
-    result.setText(String.format("<html>vertices:<br>  %s<br><br>aristas:<br>  %s<br>peso total: %d</html>",Arrays.toString(vertex), response, maxWeight));
+    result.setText(String.format("<html>Vertices:<br>  %s<br><br>Aristas:<br>  %s<br>Peso total: %d</html>",Arrays.toString(vertex), response, maxWeight));
   }
 
   private void getResponse() {
