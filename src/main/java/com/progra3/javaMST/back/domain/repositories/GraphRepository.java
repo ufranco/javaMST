@@ -123,7 +123,6 @@ public class GraphRepository {
         var edgeWeight = graph[x][y];
         if(edgeWeight < NULL) {
           edges.add(new Edge(x, y, edgeWeight));
-          edges.add(new Edge(y, x, edgeWeight));
         }
       }
     }
