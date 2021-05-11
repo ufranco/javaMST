@@ -1,5 +1,7 @@
 package com.progra3.javaMST.back.application.utils;
 
+import java.util.Objects;
+
 public class Edge {
 
   private final Integer x;
@@ -31,5 +33,19 @@ public class Edge {
       ", y=" + y +
       ", weight=" + weight +
       '}';
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Edge edge = (Edge) o;
+    return x.equals(edge.x) && y.equals(edge.y) ||
+           x.equals(edge.y) && y.equals(edge.x);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(x, y, weight);
   }
 }

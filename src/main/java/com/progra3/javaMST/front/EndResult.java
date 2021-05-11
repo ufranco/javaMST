@@ -1,11 +1,13 @@
 package com.progra3.javaMST.front;
 
+import com.progra3.javaMST.back.application.utils.Edge;
 import com.progra3.javaMST.back.interfaces.GraphController;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class EndResult {
@@ -16,10 +18,15 @@ public class EndResult {
   private JSpinner regionCounter;
   private JLabel result;
   private int[][] endResult;
+  private int maxRegions;
+  private int maxWeight;
+  private ArrayList<Edge> edges;
+  JButton btnStartProcess;
 
-  public EndResult(JFrame frame, GraphController g) {
+  public EndResult(JFrame frame, GraphController g, int edgesCount) {
     this.frame = frame;
     this.g = g;
+    maxRegions = edgesCount;
     initPanel(frame);
     initComponents();
   }
@@ -30,18 +37,24 @@ public class EndResult {
     panel.add(resultPanel);
     resultPanel.setLayout(new GridLayout(1, 0, 0, 0));
 
-    result = new JLabel("pepe");
+    result = new JLabel("");
+    result.setVerticalAlignment(SwingConstants.TOP);
+    result.setVerticalTextPosition(SwingConstants.TOP);
+    result.setHorizontalAlignment(SwingConstants.CENTER);
+    result.setBackground(Color.LIGHT_GRAY);
+    result.setFont(new Font("Verdana", Font.PLAIN, 16));
     resultPanel.add(result);
 
     regionCounter = new JSpinner();
     regionCounter.setBounds(352, 400, 201, 20);
+    regionCounter.setModel(new SpinnerNumberModel(1, 1,maxRegions , 1));
     panel.add(regionCounter);
 
     JLabel regionCounterLabel = new JLabel("Cantidad de regiones:");
     regionCounterLabel.setBounds(214, 403, 127, 14);
     panel.add(regionCounterLabel);
 
-    JButton btnStartProcess = new JButton("Empezar");
+    btnStartProcess = new JButton("Empezar");
     btnStartProcess.setBounds(296, 454, 143, 33);
     btnStartProcess.addMouseListener(new MouseAdapter() {
       @Override
@@ -63,17 +76,38 @@ public class EndResult {
   }
 
   private void startProcess() {
+    btnStartProcess.setEnabled(false);
     endResult = g.divideInRegions((Integer) regionCounter.getValue());
+    edges = new ArrayList<Edge>();
+    getResponse();
 
-    parseResponse();
   }
 
   private void parseResponse() {
     String response ="";
-    for (int i=0; i< endResult.length; i++){
-      response = response + Arrays.toString(endResult[i])+"<br>";
+    int[] vertex = new int[maxRegions];
+    for(int i=0; i<maxRegions;i++) vertex[i] = i;
+
+    for (int i=0; i< edges.size(); i++){
+      response = response + edges.get(i).toString() +"<br>";
     }
-    result.setText("<html>"+response+"</html>");
+    result.setText(String.format("<html>vertices:<br>  %s<br><br>aristas:<br>  %s<br>peso total: %d</html>",Arrays.toString(vertex), response, maxWeight));
+  }
+
+  private void getResponse() {
+    maxWeight = 0;
+    for (int i=0; i<endResult.length;  i++){
+      for (int j=0; j<endResult.length; j++){
+        if (endResult[i][j] != Integer.MAX_VALUE) {
+          maxWeight += endResult[i][j];
+          Edge edge = new Edge(i, j, endResult[i][j]);
+          if (!edges.contains(edge))
+            edges.add(edge);
+        }
+      }
+    }
+      maxWeight/=2;
+      parseResponse();
   }
 
   private void initPanel(JFrame frame) {

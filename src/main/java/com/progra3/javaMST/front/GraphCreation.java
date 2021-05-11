@@ -40,11 +40,11 @@ public class GraphCreation {
         setVertexValue();
       }
     });
-    vertexCounter.setBounds(168, 371, 106, 20);
+    vertexCounter.setBounds(368, 371, 106, 20);
     panel.add(vertexCounter);
 
     JLabel VertexCountLabel = new JLabel("Cantidad de vertices:");
-    VertexCountLabel.setBounds(42, 371, 180, 20);
+    VertexCountLabel.setBounds(242, 371, 180, 20);
     panel.add(VertexCountLabel);
 
     JLabel Titles = new JLabel("Crear Grafo");

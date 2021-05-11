@@ -11,21 +11,21 @@ import java.util.ArrayList;
 
 public class AddEdges {
 
-  private JFrame frame;
+  private final JFrame frame;
   private JPanel panel;
-  private int maxvertexIndex;
+  private final int maxVertexIndex;
   private JSpinner vertex1, vertex2, weight;
   private Integer vX, vY, vWeight;
   private JLabel edgesRecord;
   private String record;
-  private ArrayList<Edge> edges;
-  private GraphController g;
+  private final ArrayList<Edge> edges;
+  private final GraphController g;
 
   AddEdges(JFrame frame, int vertexCount, GraphController g) {
     record = "";
     this.frame = frame;
-    this.g=g;
-    maxvertexIndex = vertexCount == 1 ? 1 : vertexCount-1;
+    this.g = g;
+    maxVertexIndex = vertexCount == 1 ? 1 : vertexCount - 1;
     edges = new ArrayList<Edge>();
     initPanel(frame);
     initComponents();
@@ -59,9 +59,9 @@ public class AddEdges {
     btnGoBack.setBounds(10, 497, 136, 36);
     panel.add(btnGoBack);
 
-    vertex1= new JSpinner();
+    vertex1 = new JSpinner();
     vertex1.setBounds(92, 322, 128, 20);
-    vertex1.setModel(new SpinnerNumberModel(0, 0, maxvertexIndex, 1));
+    vertex1.setModel(new SpinnerNumberModel(0, 0, maxVertexIndex, 1));
     panel.add(vertex1);
 
     JLabel vertex1Label = new JLabel("Vertice 1:");
@@ -70,7 +70,7 @@ public class AddEdges {
 
     vertex2 = new JSpinner();
     vertex2.setBounds(356, 322, 128, 20);
-    vertex2.setModel(new SpinnerNumberModel(0, 0, maxvertexIndex, 1));
+    vertex2.setModel(new SpinnerNumberModel(0, 0, maxVertexIndex, 1));
     panel.add(vertex2);
     JLabel vertex2Label = new JLabel("Vertice 2:");
     vertex2Label.setBounds(286, 325, 60, 14);
@@ -78,7 +78,7 @@ public class AddEdges {
 
     weight = new JSpinner();
     weight.setBounds(608, 322, 128, 20);
-    weight.setModel(new SpinnerNumberModel(1, 1, null, 1));
+    weight.setModel(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE - 1, 1));
     panel.add(weight);
     JLabel weightLabel = new JLabel("Peso:");
     weightLabel.setBounds(564, 325, 34, 14);
@@ -98,12 +98,9 @@ public class AddEdges {
     btnNext.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        for (Edge edge : edges) {
-          g.addEdge(edge.getX(), edge.getY(), edge.getWeight());
-        }
         displayEndResult(getFrame(), g);
       }
-    });;
+    });
     panel.add(btnNext);
 
     JButton btnDeleteLast = new JButton("Borrar anterior");
@@ -126,32 +123,67 @@ public class AddEdges {
 
   }
 
-  private void deleteOne() {
-    Edge edge = createEdge();
-    if (edges.contains(edge))
-      edges.remove(edge);
-    else {
-      String text = String.format("No existe arista (%s,%s,%s)", vX,vY,vWeight);
-      JOptionPane.showMessageDialog(null, text); //mensajito de error
-    }
-  }
-
   private Edge createEdge() {
-    vX =(Integer) vertex1.getValue();
+    vX = (Integer) vertex1.getValue();
     vY = (Integer) vertex2.getValue();
-    vWeight =(Integer) weight.getValue();
+    vWeight = (Integer) weight.getValue();
 
     if (vX != vY)
       return new Edge(vX, vY, vWeight);
     else {
-      JOptionPane.showMessageDialog(null, "no se admiten loops"); //mensajito de error
+      JOptionPane.showMessageDialog(this.panel, "no se admiten loops"); //mensajito de error
       return null;
     }
   }
 
+  private void addEdgeToRecord() {
+    Edge edge = createEdge();
+    if ((edge != null) && !edges.contains(edge)) {
+      edges.add(edge);
+      String text = String.format("(%s,%s,%s);", edge.getX(), edge.getY(), edge.getWeight());
+      record = record + text;
+      edgesRecord.setText("[" + record + "]");
+    } else
+      JOptionPane.showMessageDialog(this.panel, "ya existe la arista dada");
+  }
+
+  private void deleteOne() {
+    Edge edge = createEdge();
+    if (edges.contains(edge)) {
+      removeOneRecord(edge);
+      edges.remove(edge);
+    } else {
+      String text = String.format("No existe arista (%s,%s,%s)", vX, vY, vWeight);
+      JOptionPane.showMessageDialog(this.panel, text); //mensajito de error
+    }
+  }
+
   private void deleteLast() {
-    if (edges.size() > 0)
-      edges.remove(edges.size()-1);
+    if (edges.size() > 0) {
+      removeLastRecord();
+      edges.remove(edges.size() - 1);
+    }
+  }
+
+  private void removeOneRecord(Edge edge) {
+    String edgeRecord = String.format("(%s,%s,%s)", edge.getX(), edge.getY(), edge.getWeight());
+
+    String[] recordString = record.split(";");
+    for (int i=0; i<recordString.length; i++) {
+      if (recordString[i].equals(edgeRecord)) {
+        recordString[i] = "";
+        break;
+      }
+    }
+    record = String.join(";", recordString);
+    edgesRecord.setText(String.format("[%s]", record));
+  }
+
+  private void removeLastRecord() {
+    String[] recordString = record.split(";");
+    recordString[recordString.length - 1] = "";
+    record = String.join(";", recordString);
+    edgesRecord.setText(String.format("[%s]", record));
   }
 
   private void displayGraphCreation(Object frame) {
@@ -160,45 +192,18 @@ public class AddEdges {
     panel.setEnabled(false);
   }
 
-  private void displayEndResult(JFrame frame, GraphController g){
-    EndResult er = new EndResult(frame, g);
-    this.panel.setVisible(false);
-    panel.setEnabled(false);
+  private void displayEndResult(JFrame frame, GraphController g) {
+    if (edges.size() > 0) {
+      for (Edge edge : edges) {
+        g.addEdge(edge.getX(), edge.getY(), edge.getWeight());
+      }
+      EndResult er = new EndResult(frame, g, edges.size());
+      this.panel.setVisible(false);
+      panel.setEnabled(false);
+    } else JOptionPane.showMessageDialog(this.panel, "no hay aristas en este grafo");
   }
 
   private JFrame getFrame() {
     return this.frame;
   }
-
-  private void addEdgeToRecord() {
-    Edge edge = createEdge();
-    if((edge != null) && containsEdge(edge)) {
-      edges.add(edge);
-      String text = String.format("(%s,%s,%s);", edge.getX(), edge.getY(), edge.getWeight());
-      record = record + text;
-      edgesRecord.setText("[" + record + "]");
-    }
-    else
-      JOptionPane.showMessageDialog(null, "ya existe la arista dada");
-  }
-
-  private boolean containsEdge(Edge edge) {
-    for (Edge e : edges) {
-      if (sameEdge(e.getX(), e.getY(), edge.getX(), edge.getY())) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  private boolean sameEdge(int x1, int y1, int x2, int y2){
-    if (x1 == x2 &&
-        y1 == y2 ||
-        y1 == x2 &&
-        x1 == y2)
-      return true;
-    return false;
-  }
 }
-
-
