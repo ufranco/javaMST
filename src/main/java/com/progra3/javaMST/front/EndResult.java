@@ -71,9 +71,9 @@ public class EndResult {
   private void parseResponse() {
     String response ="";
     for (int i=0; i< endResult.length; i++){
-      response = response + Arrays.toString(endResult[i])+"\n";
+      response = response + Arrays.toString(endResult[i])+"<br>";
     }
-    result.setText(response);
+    result.setText("<html>"+response+"</html>");
   }
 
   private void initPanel(JFrame frame) {
